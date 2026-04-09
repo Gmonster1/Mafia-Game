@@ -1,9 +1,41 @@
-// Backend URL - Change this to your hosted backend URL (e.g., https://your-app.onrender.com)
-const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-    ? '' 
-    : 'https://mafia-game-backend.onrender.com'; // Replace with your actual backend URL
+// Backend URL Configuration
+const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const BACKEND_URL = IS_LOCAL ? '' : 'https://mafia-game-backend.onrender.com'; 
 
-const socket = io(BACKEND_URL);
+console.log(`[Diagnostic] Initializing mission on ${IS_LOCAL ? 'Local' : 'Production'} environment.`);
+console.log(`[Diagnostic] Targeting backend at: ${BACKEND_URL || 'Local Node Server'}`);
+
+const socket = io(BACKEND_URL, {
+    reconnection: true,
+    reconnectionAttempts: 5,
+    timeout: 10000
+});
+
+// UI Elements for Diagnostics
+const connectionStatus = document.getElementById('connection-status');
+
+// Socket Connection Monitoring
+socket.on('connect', () => {
+    console.log(`[Network] Secure connection established. ID: ${socket.id}`);
+    if (connectionStatus) {
+        connectionStatus.innerHTML = `
+            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+            <span>Comms Active</span>
+        `;
+        connectionStatus.classList.replace('text-slate-500', 'text-emerald-500');
+    }
+});
+
+socket.on('connect_error', (error) => {
+    console.error(`[Network] Connection failed: ${error.message}`);
+    if (connectionStatus) {
+        connectionStatus.innerHTML = `
+            <div class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
+            <span>Comms Failure</span>
+        `;
+        connectionStatus.classList.replace('text-slate-500', 'text-rose-500');
+    }
+});
 
 // State
 let currentRoomId = null;
@@ -372,10 +404,26 @@ function showOverlay(title, msg, icon = 'alert-triangle') {
 // --- Event Listeners ---
 document.getElementById('create-room-btn').onclick = () => {
     const username = usernameInput.value.trim();
-    if (username) {
-        socket.emit('createRoom', username);
-    } else {
+    console.log(`[Action] 'Initialize New Mission' triggered. Username: ${username}`);
+
+    if (!username) {
         showOverlay('Identification Required', 'Please enter your agent name before initializing the operation.', 'user-x');
+        return;
+    }
+
+    if (!socket.connected) {
+        console.warn(`[Action Failure] Comms are down. Attempting to reconnect...`);
+        socket.connect();
+        showOverlay('Connection Error', 'Secure comms are currently offline. Please wait while we re-establish contact.', 'wifi-off');
+        return;
+    }
+
+    try {
+        console.log(`[Network] Emitting 'createRoom' for agent: ${username}`);
+        socket.emit('createRoom', username);
+    } catch (err) {
+        console.error(`[Action Failure] Mission initialization failed: ${err.message}`);
+        showOverlay('System Error', 'The mission initialization process encountered a fatal error. Check logs.', 'alert-triangle');
     }
 };
 
