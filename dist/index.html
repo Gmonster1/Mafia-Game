@@ -34,7 +34,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
-  <script type="module" crossorigin src="/assets/index-RXF1K6Uv.js"></script>
+  <script type="module" crossorigin src="/assets/index-BrSXAdeJ.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-200 selection:bg-rose-500/30 overflow-x-hidden">
     <div id="app" class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
@@ -262,7 +262,7 @@
     </div>
 
     <!-- Tailwind-like Utility Classes for modern UI -->
-    <style>
+    <style type="text/tailwindcss">
         :root {
             --rose-500: #f43f5e;
             --rose-600: #e11d48;
@@ -283,12 +283,12 @@
         }
 
         .role-opt-btn {
-            @apply flex flex-col items-center justify-center p-3 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all text-slate-400 text-xs font-bold gap-2 focus:outline-none focus:ring-2 focus:ring-rose-500/50 active:scale-95;
+            @apply flex flex-col items-center justify-center p-4 rounded-2xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all text-slate-400 text-[10px] md:text-xs font-bold gap-3 focus:outline-none focus:ring-2 focus:ring-rose-500/50 active:scale-95 shadow-lg shadow-black/20;
         }
 
-        .role-opt-btn i { @apply w-4 h-4; }
-        .role-opt-btn.selected { @apply bg-rose-500/20 border-rose-500/50 text-rose-500; }
-        .role-opt-btn:disabled { @apply opacity-50 cursor-not-allowed grayscale; }
+        .role-opt-btn i { @apply w-5 h-5 md:w-6 md:h-6; }
+        .role-opt-btn.selected { @apply bg-rose-500/20 border-rose-500/50 text-rose-500 shadow-rose-500/10; }
+        .role-opt-btn:disabled { @apply opacity-50 cursor-not-allowed grayscale shadow-none; }
 
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }

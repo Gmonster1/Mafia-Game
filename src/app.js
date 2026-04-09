@@ -172,10 +172,13 @@ socket.on('gameStarted', (data) => {
 socket.on('messageReceived', (msg) => {
     const isMe = msg.username === myPlayer.username;
     const msgElement = document.createElement('div');
-    msgElement.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1`;
+    msgElement.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1 mb-2`;
     msgElement.innerHTML = `
-        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">${msg.username} • ${msg.time}</span>
-        <div class="px-4 py-2 rounded-2xl ${isMe ? 'bg-rose-600 text-white rounded-tr-none' : 'bg-white/5 text-slate-300 rounded-tl-none border border-white/5'}">
+        <div class="flex items-center gap-2 px-1">
+            <span class="text-[9px] font-black uppercase tracking-widest text-slate-500">${msg.username}</span>
+            <span class="text-[8px] text-slate-600 font-mono">${msg.time}</span>
+        </div>
+        <div class="px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${isMe ? 'bg-rose-600 text-white rounded-tr-none shadow-rose-900/20' : 'bg-white/5 text-slate-300 rounded-tl-none border border-white/5'}">
             ${msg.text}
         </div>
     `;
