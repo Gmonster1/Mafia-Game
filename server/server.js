@@ -11,8 +11,9 @@ app.use(express.static(path.join(__dirname, '../dist')));
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
+    origin: "*", // In production, replace with your GitHub Pages URL (e.g., "https://yourusername.github.io")
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 

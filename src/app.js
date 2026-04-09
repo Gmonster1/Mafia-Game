@@ -1,4 +1,9 @@
-const socket = io();
+// Backend URL - Change this to your hosted backend URL (e.g., https://your-app.onrender.com)
+const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? '' 
+    : 'https://mafia-game-backend.onrender.com'; // Replace with your actual backend URL
+
+const socket = io(BACKEND_URL);
 
 // State
 let currentRoomId = null;
